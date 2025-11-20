@@ -11,26 +11,19 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 )
 
 func main() {
+	const EmailKey = "Email"
+
 	ctx := context.Background()
-	ctxWithTimeOut, cancel := context.WithTimeout(ctx, 2*time.Second)
-	defer cancel()
+	ctxWithValue := context.WithValue(ctx, EmailKey, "A@A.ru")
 
-	done := make(chan struct{})
-
-	go func() {
-		time.Sleep(3 * time.Second)
-		close(done)
-	}()
-
-	select {
-	case <-done:
-		fmt.Println("Done task !")
-	case <-ctxWithTimeOut.Done():
-		fmt.Println("TimeOut !")
+	userEmail, ok := ctxWithValue.Value(EmailKey).(string)
+	if ok {
+		fmt.Println(userEmail)
+	} else {
+		fmt.Println("NoValue")
 	}
 }
 func main2() {
