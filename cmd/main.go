@@ -19,8 +19,7 @@ func main() {
 	ctx := context.Background()
 	ctxWithValue := context.WithValue(ctx, EmailKey, "A@A.ru")
 
-	userEmail, ok := ctxWithValue.Value(EmailKey).(string)
-	if ok {
+	if userEmail, ok := ctxWithValue.Value(EmailKey).(string); ok {
 		fmt.Println(userEmail)
 	} else {
 		fmt.Println("NoValue")
