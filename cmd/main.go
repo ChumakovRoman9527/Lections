@@ -14,10 +14,12 @@ import (
 )
 
 func main() {
-	const EmailKey = "Email"
+	type key string
+	const EmailKey key = "Email"
 
 	ctx := context.Background()
-	ctxWithValue := context.WithValue(ctx, EmailKey, "A@A.ru")
+	ctxWithValue := context.WithValue(ctx, EmailKey, "A@A.ru") - нет ошибки
+	// ctxWithValue := context.WithValue(ctx, "Not", "A@A.ru") //ошибка - такого ключа нету
 
 	if userEmail, ok := ctxWithValue.Value(EmailKey).(string); ok {
 		fmt.Println(userEmail)
