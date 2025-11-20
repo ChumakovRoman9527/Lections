@@ -1,8 +1,8 @@
 package main
 
 import (
-	"11-JWTAUTH/internal/link"
-	"11-JWTAUTH/internal/user"
+	"12-Context/internal/link"
+	"12-Context/internal/user"
 	"os"
 
 	"github.com/joho/godotenv"

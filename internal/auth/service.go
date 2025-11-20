@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"11-JWTAUTH/internal/user"
+	"12-Context/internal/user"
 	"errors"
 	"fmt"
 

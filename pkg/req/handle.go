@@ -1,7 +1,7 @@
 package req
 
 import (
-	"11-JWTAUTH/pkg/res"
+	"12-Context/pkg/res"
 	"net/http"
 )
 

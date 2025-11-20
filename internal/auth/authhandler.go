@@ -1,10 +1,10 @@
 package auth
 
 import (
-	"11-JWTAUTH/configs"
-	"11-JWTAUTH/pkg/jwt"
-	"11-JWTAUTH/pkg/req"
-	"11-JWTAUTH/pkg/res"
+	"12-Context/configs"
+	"12-Context/pkg/jwt"
+	"12-Context/pkg/req"
+	"12-Context/pkg/res"
 	"net/http"
 )
 

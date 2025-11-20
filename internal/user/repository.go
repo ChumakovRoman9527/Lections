@@ -1,7 +1,7 @@
 package user
 
 import (
-	"11-JWTAUTH/pkg/db"
+	"12-Context/pkg/db"
 
 	"gorm.io/gorm/clause"
 )
