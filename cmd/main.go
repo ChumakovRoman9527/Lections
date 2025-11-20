@@ -11,21 +11,32 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 )
 
-func main() {
-	type key string
-	const EmailKey key = "Email"
-
-	ctx := context.Background()
-	ctxWithValue := context.WithValue(ctx, EmailKey, "A@A.ru") - нет ошибки
-	// ctxWithValue := context.WithValue(ctx, "Not", "A@A.ru") //ошибка - такого ключа нету
-
-	if userEmail, ok := ctxWithValue.Value(EmailKey).(string); ok {
-		fmt.Println(userEmail)
-	} else {
-		fmt.Println("NoValue")
+func tickOperation(ctx context.Context) {
+	ticker := time.NewTicker(200 * time.Millisecond)
+	defer ticker.Stop() // Остановим ticker, когда функция завершится
+	for {
+		select {
+		case <-ticker.C:
+			fmt.Println("tick:", time.Now())
+		case <-ctx.Done():
+			fmt.Println("Cancel")
+			return
+		}
 	}
+}
+
+func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+
+	go tickOperation(ctx)
+
+	time.Sleep(3 * time.Second)
+
+	cancel()
+	time.Sleep(1 * time.Second)
 }
 func main2() {
 
