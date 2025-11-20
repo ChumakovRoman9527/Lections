@@ -7,12 +7,33 @@ import (
 	"12-Context/internal/user"
 	"12-Context/pkg/db"
 	"12-Context/pkg/middleware"
+	"context"
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 )
 
 func main() {
+	ctx := context.Background()
+	ctxWithTimeOut, cancel := context.WithTimeout(ctx, 2*time.Second)
+	defer cancel()
+
+	done := make(chan struct{})
+
+	go func() {
+		time.Sleep(3 * time.Second)
+		close(done)
+	}()
+
+	select {
+	case <-done:
+		fmt.Println("Done task !")
+	case <-ctxWithTimeOut.Done():
+		fmt.Println("TimeOut !")
+	}
+}
+func main2() {
 
 	conf := configs.LoadConfig()
 
