@@ -1,12 +1,22 @@
 package middleware
 
 import (
+	"12-Context/configs"
+	"12-Context/pkg/jwt"
+	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
 )
 
-func IsAuthed(next http.Handler) http.Handler {
+type key string
+
+const (
+	ConstEmailKey key = "ConstEmailKey"
+)
+
+func IsAuthed(next http.Handler, config *configs.AuthConfig) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authorization := r.Header.Get("Authorization")
 		if authorization == "" {
@@ -15,8 +25,12 @@ func IsAuthed(next http.Handler) http.Handler {
 			//r.Response.StatusCode = 500
 			return
 		}
-		authorization = strings.TrimPrefix(authorization, "Bearer ")
-		log.Println(authorization)
-		next.ServeHTTP(w, r)
+		token := strings.TrimPrefix(authorization, "Bearer ")
+		isValid, data := jwt.NewJWT(config.Secret).Parse(token)
+		fmt.Println(isValid)
+		ctx := context.WithValue(r.Context(), ConstEmailKey, data.Email)
+		req := r.WithContext(ctx)
+
+		next.ServeHTTP(w, req)
 	})
 }

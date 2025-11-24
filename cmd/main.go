@@ -7,38 +7,36 @@ import (
 	"12-Context/internal/user"
 	"12-Context/pkg/db"
 	"12-Context/pkg/middleware"
-	"context"
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 )
 
-func tickOperation(ctx context.Context) {
-	ticker := time.NewTicker(200 * time.Millisecond)
-	defer ticker.Stop() // Остановим ticker, когда функция завершится
-	for {
-		select {
-		case <-ticker.C:
-			fmt.Println("tick:", time.Now())
-		case <-ctx.Done():
-			fmt.Println("Cancel")
-			return
-		}
-	}
-}
+// func tickOperation(ctx context.Context) {
+// 	ticker := time.NewTicker(200 * time.Millisecond)
+// 	defer ticker.Stop() // Остановим ticker, когда функция завершится
+// 	for {
+// 		select {
+// 		case <-ticker.C:
+// 			fmt.Println("tick:", time.Now())
+// 		case <-ctx.Done():
+// 			fmt.Println("Cancel")
+// 			return
+// 		}
+// 	}
+// }
 
+// func main2() {
+// 	ctx, cancel := context.WithCancel(context.Background())
+
+// 	go tickOperation(ctx)
+
+// 	time.Sleep(3 * time.Second)
+
+//		cancel()
+//		time.Sleep(1 * time.Second)
+//	}
 func main() {
-	ctx, cancel := context.WithCancel(context.Background())
-
-	go tickOperation(ctx)
-
-	time.Sleep(3 * time.Second)
-
-	cancel()
-	time.Sleep(1 * time.Second)
-}
-func main2() {
 
 	conf := configs.LoadConfig()
 
@@ -60,6 +58,7 @@ func main2() {
 
 	link.NewLinkHandler(router, link.LinkHandlerDeps{
 		LinkRepository: linkRepository,
+		Config:         conf,
 	})
 
 	//Middlewares

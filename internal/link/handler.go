@@ -1,6 +1,7 @@
 package link
 
 import (
+	"12-Context/configs"
 	"12-Context/pkg/middleware"
 	"12-Context/pkg/req"
 	"12-Context/pkg/res"
@@ -17,12 +18,13 @@ type linkHandler struct {
 
 type LinkHandlerDeps struct {
 	LinkRepository *LinkRepository
+	Config         *configs.Config
 }
 
 func NewLinkHandler(router *http.ServeMux, deps LinkHandlerDeps) {
 	handler := &linkHandler{LinkRepository: deps.LinkRepository}
 	router.HandleFunc("POST /link", handler.Create())
-	router.Handle("PATCH /link/{id}", middleware.IsAuthed(handler.Update()))
+	router.Handle("PATCH /link/{id}", middleware.IsAuthed(handler.Update(), &deps.Config.Auth))
 	router.HandleFunc("DELETE /link/{id}", handler.Delete())
 	router.HandleFunc("GET /{hash}", handler.GoTo())
 
@@ -57,6 +59,17 @@ func (handler *linkHandler) Create() http.HandlerFunc {
 func (handler *linkHandler) Update() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, err := req.HandleBody[LinkUpdateRequest](&w, r)
+
+		// ctx := r.Context()
+
+		// fmt.Println("ctx: ", ctx.Value(middleware.ConstEmailKey))
+
+		email, ok := r.Context().Value(middleware.ConstEmailKey).(string)
+
+		if ok {
+			fmt.Println("email: ", email)
+		}
+
 		if err != nil {
 			fmt.Println(err.Error())
 			return
