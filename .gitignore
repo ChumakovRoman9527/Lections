@@ -2,5 +2,4 @@
 .env
 *postgres_data*
 *GitIgnoreFolders
-*postgres_data
-*postgres_data
+.gitignore
