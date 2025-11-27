@@ -1,8 +1,8 @@
 package main
 
 import (
-	"12-Context/internal/link"
-	"12-Context/internal/user"
+	"13-AdvancedDB/internal/link"
+	"13-AdvancedDB/internal/user"
 	"os"
 
 	"github.com/joho/godotenv"

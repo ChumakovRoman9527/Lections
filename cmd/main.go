@@ -1,12 +1,12 @@
 package main
 
 import (
-	"12-Context/configs"
-	"12-Context/internal/auth"
-	"12-Context/internal/link"
-	"12-Context/internal/user"
-	"12-Context/pkg/db"
-	"12-Context/pkg/middleware"
+	"13-AdvancedDB/configs"
+	"13-AdvancedDB/internal/auth"
+	"13-AdvancedDB/internal/link"
+	"13-AdvancedDB/internal/user"
+	"13-AdvancedDB/pkg/db"
+	"13-AdvancedDB/pkg/middleware"
 	"fmt"
 	"log"
 	"net/http"

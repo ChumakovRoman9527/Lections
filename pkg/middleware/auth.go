@@ -1,10 +1,9 @@
 package middleware
 
 import (
-	"12-Context/configs"
-	"12-Context/pkg/jwt"
+	"13-AdvancedDB/configs"
+	"13-AdvancedDB/pkg/jwt"
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -16,18 +15,28 @@ const (
 	ConstEmailKey key = "ConstEmailKey"
 )
 
+func writeUnAuthed(w http.ResponseWriter) {
+	w.WriteHeader(http.StatusUnauthorized)
+	w.Write([]byte(http.StatusText(http.StatusUnauthorized)))
+}
 func IsAuthed(next http.Handler, config *configs.AuthConfig) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authorization := r.Header.Get("Authorization")
 		if authorization == "" {
 			log.Println("Bearer токена нет !!!")
-			//next.ServeHTTP(w, r)
-			//r.Response.StatusCode = 500
+			writeUnAuthed(w)
+			return
+		}
+		if !strings.HasPrefix(authorization, "Bearer ") {
+			writeUnAuthed(w)
 			return
 		}
 		token := strings.TrimPrefix(authorization, "Bearer ")
 		isValid, data := jwt.NewJWT(config.Secret).Parse(token)
-		fmt.Println(isValid)
+		if !isValid {
+			writeUnAuthed(w)
+			return
+		}
 		ctx := context.WithValue(r.Context(), ConstEmailKey, data.Email)
 		req := r.WithContext(ctx)
 
