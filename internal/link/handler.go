@@ -2,9 +2,11 @@ package link
 
 import (
 	"13-AdvancedDB/configs"
+	"13-AdvancedDB/pkg/event"
 	"13-AdvancedDB/pkg/middleware"
 	"13-AdvancedDB/pkg/req"
 	"13-AdvancedDB/pkg/res"
+
 	"fmt"
 	"net/http"
 	"strconv"
@@ -14,15 +16,20 @@ import (
 
 type linkHandler struct {
 	LinkRepository *LinkRepository
+	EventBus       *event.EventBus
 }
 
 type LinkHandlerDeps struct {
 	LinkRepository *LinkRepository
+	EventBus       *event.EventBus
 	Config         *configs.Config
 }
 
 func NewLinkHandler(router *http.ServeMux, deps LinkHandlerDeps) {
-	handler := &linkHandler{LinkRepository: deps.LinkRepository}
+	handler := &linkHandler{
+		LinkRepository: deps.LinkRepository,
+		EventBus:       deps.EventBus,
+	}
 	router.HandleFunc("POST /link", handler.Create())
 	router.Handle("PATCH /link/{id}", middleware.IsAuthed(handler.Update(), &deps.Config.Auth))
 	router.HandleFunc("DELETE /link/{id}", handler.Delete())
@@ -125,6 +132,12 @@ func (handler *linkHandler) GoTo() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusNotFound)
 			return
 		}
+
+		// handler.StatRepository.AddClick(link.ID)
+		go handler.EventBus.Publish(event.Event{
+			Type: event.EventLinkVisited,
+			Data: link.ID,
+		})
 		http.Redirect(w, r, link.Url, http.StatusTemporaryRedirect)
 	}
 }
