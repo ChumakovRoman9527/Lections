@@ -34,3 +34,9 @@ func (repo *StatRepository) AddClick(LinkId uint) {
 		repo.Db.Save(&stat)
 	}
 }
+
+func (repo *StatRepository) GetStat(FromD time.Time, ToD time.Time, by string) (Stat, error) {
+	var res Stat
+
+	return res, nil
+}
