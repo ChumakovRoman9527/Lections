@@ -5,3 +5,8 @@ type GetStatRequest struct {
 	ToD   string `json:"tod" validate:"required"`
 	By    string `json:"by" validate:"required,oneof=day month"`
 }
+
+type GetStatResponce struct {
+	Period string `json:"period"`
+	Sum    int    `json:"summa"`
+}

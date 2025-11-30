@@ -35,8 +35,21 @@ func (repo *StatRepository) AddClick(LinkId uint) {
 	}
 }
 
-func (repo *StatRepository) GetStat(FromD time.Time, ToD time.Time, by string) (Stat, error) {
-	var res Stat
+func (repo *StatRepository) GetStats(FromD time.Time, ToD time.Time, by string) []GetStatResponce {
+	var res []GetStatResponce
+	var reqGroup string
+	switch by {
+	case GroupByDay:
+		reqGroup = "to_char(date, 'yyyy-mm-dd') as period, sum(clicks)"
+	case GroupByMonth:
+		reqGroup = "to_char(date, 'yyyy-mm') as period, sum(clicks)"
+	}
+	repo.Db.Table("stats").
+		Select(reqGroup).
+		Where("date between ? and ?", FromD, ToD).
+		Group("period").
+		Order("period").
+		Scan(&res)
 
-	return res, nil
+	return res
 }

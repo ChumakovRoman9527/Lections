@@ -4,10 +4,16 @@ import (
 	"13-AdvancedDB/configs"
 	"13-AdvancedDB/pkg/middleware"
 	"13-AdvancedDB/pkg/req"
+	"13-AdvancedDB/pkg/res"
 	"fmt"
 	"net/http"
 	"slices"
 	"time"
+)
+
+const (
+	GroupByDay   = "day"
+	GroupByMonth = "month"
 )
 
 type statHandler struct {
@@ -48,7 +54,7 @@ func (handler *statHandler) GetStat() http.HandlerFunc {
 		}
 		*/
 		// fmt.Println(body)
-		requiredOrder := []string{"day", "month"}
+		requiredOrder := []string{GroupByDay, GroupByMonth}
 		q_FromD := body.FromD
 		q_ToD := body.ToD
 		OrderBy := body.By
@@ -68,7 +74,8 @@ func (handler *statHandler) GetStat() http.HandlerFunc {
 			return
 		}
 
-		fmt.Println(FromD, ToD, OrderBy)
+		result := handler.StatRepository.GetStats(FromD, ToD, OrderBy)
+		res.Json(w, result, 200)
 
 	}
 }
