@@ -1,10 +1,10 @@
 package auth
 
 import (
-	"12-Context/configs"
-	"12-Context/pkg/jwt"
-	"12-Context/pkg/req"
-	"12-Context/pkg/res"
+	"13-AdvancedDB/configs"
+	"13-AdvancedDB/pkg/jwt"
+	"13-AdvancedDB/pkg/req"
+	"13-AdvancedDB/pkg/res"
 	"net/http"
 )
 

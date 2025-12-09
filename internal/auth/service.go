@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"12-Context/internal/user"
+	"13-AdvancedDB/internal/user"
 	"errors"
 	"fmt"
 

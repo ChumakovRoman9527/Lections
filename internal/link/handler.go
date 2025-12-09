@@ -1,10 +1,12 @@
 package link
 
 import (
-	"12-Context/configs"
-	"12-Context/pkg/middleware"
-	"12-Context/pkg/req"
-	"12-Context/pkg/res"
+	"13-AdvancedDB/configs"
+	"13-AdvancedDB/pkg/event"
+	"13-AdvancedDB/pkg/middleware"
+	"13-AdvancedDB/pkg/req"
+	"13-AdvancedDB/pkg/res"
+
 	"fmt"
 	"net/http"
 	"strconv"
@@ -14,19 +16,25 @@ import (
 
 type linkHandler struct {
 	LinkRepository *LinkRepository
+	EventBus       *event.EventBus
 }
 
 type LinkHandlerDeps struct {
 	LinkRepository *LinkRepository
+	EventBus       *event.EventBus
 	Config         *configs.Config
 }
 
 func NewLinkHandler(router *http.ServeMux, deps LinkHandlerDeps) {
-	handler := &linkHandler{LinkRepository: deps.LinkRepository}
+	handler := &linkHandler{
+		LinkRepository: deps.LinkRepository,
+		EventBus:       deps.EventBus,
+	}
 	router.HandleFunc("POST /link", handler.Create())
 	router.Handle("PATCH /link/{id}", middleware.IsAuthed(handler.Update(), &deps.Config.Auth))
 	router.HandleFunc("DELETE /link/{id}", handler.Delete())
 	router.HandleFunc("GET /{hash}", handler.GoTo())
+	router.Handle("GET /link", middleware.IsAuthed(handler.GetAll(), &deps.Config.Auth))
 
 }
 
@@ -124,6 +132,30 @@ func (handler *linkHandler) GoTo() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusNotFound)
 			return
 		}
+
+		// handler.StatRepository.AddClick(link.ID)
+		go handler.EventBus.Publish(event.Event{
+			Type: event.EventLinkVisited,
+			Data: link.ID,
+		})
 		http.Redirect(w, r, link.Url, http.StatusTemporaryRedirect)
+	}
+}
+
+func (handler *linkHandler) GetAll() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+		if err != nil {
+			http.Error(w, "invalid limit", http.StatusBadRequest)
+			return
+		}
+		offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
+		if err != nil {
+			http.Error(w, "invalid offset", http.StatusBadRequest)
+			return
+		}
+
+		result := handler.LinkRepository.GetAllLinksResponse(limit, offset)
+		res.Json(w, result, 200)
 	}
 }

@@ -1,12 +1,14 @@
 package main
 
 import (
-	"12-Context/configs"
-	"12-Context/internal/auth"
-	"12-Context/internal/link"
-	"12-Context/internal/user"
-	"12-Context/pkg/db"
-	"12-Context/pkg/middleware"
+	"13-AdvancedDB/configs"
+	"13-AdvancedDB/internal/auth"
+	"13-AdvancedDB/internal/link"
+	"13-AdvancedDB/internal/stat"
+	"13-AdvancedDB/internal/user"
+	"13-AdvancedDB/pkg/db"
+	"13-AdvancedDB/pkg/event"
+	"13-AdvancedDB/pkg/middleware"
 	"fmt"
 	"log"
 	"net/http"
@@ -44,12 +46,18 @@ func main() {
 	// hello.NewHelloHandler(router)
 	db := db.NewDb(conf)
 	router := http.NewServeMux()
+	eventBus := event.NewEventBus()
+
 	//Repositories
 	linkRepository := link.NewLinkRepository(db)
 	userRepository := user.NewUserRepository(db)
+	statRepository := stat.NewStatRepository(db)
 	//Services
 	AuthService := auth.NewAuthService(userRepository)
-
+	StatService := stat.NewStatService(&stat.StatServiceDeps{
+		EventBus:       eventBus,
+		StatRepository: statRepository,
+	})
 	//Handlers
 	auth.NewAuthHandler(router, auth.AuthHandlerDeps{
 		Config:      conf,
@@ -58,6 +66,12 @@ func main() {
 
 	link.NewLinkHandler(router, link.LinkHandlerDeps{
 		LinkRepository: linkRepository,
+		EventBus:       eventBus,
+		Config:         conf,
+	})
+
+	stat.NewStatHandler(router, stat.StatHandlerDeps{
+		StatRepository: statRepository,
 		Config:         conf,
 	})
 
@@ -66,6 +80,8 @@ func main() {
 		middleware.CORS,
 		middleware.Logging,
 	)
+
+	go StatService.AddClick()
 
 	server := http.Server{
 		Addr:    ":8081",
