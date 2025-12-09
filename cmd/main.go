@@ -38,8 +38,8 @@ import (
 //		cancel()
 //		time.Sleep(1 * time.Second)
 //	}
-func main() {
 
+func App() http.Handler {
 	conf := configs.LoadConfig()
 
 	// router := http.NewServeMux()
@@ -74,18 +74,19 @@ func main() {
 		StatRepository: statRepository,
 		Config:         conf,
 	})
-
+	go StatService.AddClick()
 	//Middlewares
 	stack := middleware.Chain(
 		middleware.CORS,
 		middleware.Logging,
 	)
-
-	go StatService.AddClick()
-
+	return stack(router)
+}
+func main() {
+	app := App()
 	server := http.Server{
 		Addr:    ":8081",
-		Handler: stack(router),
+		Handler: app,
 	}
 
 	fmt.Println("Server is listening on port 8081")

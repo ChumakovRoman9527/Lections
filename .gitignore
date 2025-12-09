@@ -1,5 +1,6 @@
 *.exe
 .env
+/cmd/.env
 *postgres_data*
 *GitIgnoreFolders
 .gitignore
