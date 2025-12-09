@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"13-AdvancedDB/internal/user"
+	"14-TestingAPI/internal/user"
 	"errors"
 	"fmt"
 

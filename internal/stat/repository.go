@@ -1,7 +1,7 @@
 package stat
 
 import (
-	"13-AdvancedDB/pkg/db"
+	"14-TestingAPI/pkg/db"
 	"time"
 
 	"gorm.io/datatypes"

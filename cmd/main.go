@@ -1,14 +1,14 @@
 package main
 
 import (
-	"13-AdvancedDB/configs"
-	"13-AdvancedDB/internal/auth"
-	"13-AdvancedDB/internal/link"
-	"13-AdvancedDB/internal/stat"
-	"13-AdvancedDB/internal/user"
-	"13-AdvancedDB/pkg/db"
-	"13-AdvancedDB/pkg/event"
-	"13-AdvancedDB/pkg/middleware"
+	"14-TestingAPI/configs"
+	"14-TestingAPI/internal/auth"
+	"14-TestingAPI/internal/link"
+	"14-TestingAPI/internal/stat"
+	"14-TestingAPI/internal/user"
+	"14-TestingAPI/pkg/db"
+	"14-TestingAPI/pkg/event"
+	"14-TestingAPI/pkg/middleware"
 	"fmt"
 	"log"
 	"net/http"

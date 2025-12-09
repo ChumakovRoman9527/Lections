@@ -1,10 +1,10 @@
 package stat
 
 import (
-	"13-AdvancedDB/configs"
-	"13-AdvancedDB/pkg/middleware"
-	"13-AdvancedDB/pkg/req"
-	"13-AdvancedDB/pkg/res"
+	"14-TestingAPI/configs"
+	"14-TestingAPI/pkg/middleware"
+	"14-TestingAPI/pkg/req"
+	"14-TestingAPI/pkg/res"
 	"fmt"
 	"net/http"
 	"slices"

@@ -1,7 +1,7 @@
 package db
 
 import (
-	"13-AdvancedDB/configs"
+	"14-TestingAPI/configs"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

@@ -1,7 +1,7 @@
 package stat
 
 import (
-	"13-AdvancedDB/pkg/event"
+	"14-TestingAPI/pkg/event"
 	"log"
 )
 

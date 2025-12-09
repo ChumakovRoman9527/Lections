@@ -1,9 +1,9 @@
 package main
 
 import (
-	"13-AdvancedDB/internal/link"
-	"13-AdvancedDB/internal/stat"
-	"13-AdvancedDB/internal/user"
+	"14-TestingAPI/internal/link"
+	"14-TestingAPI/internal/stat"
+	"14-TestingAPI/internal/user"
 	"os"
 
 	"github.com/joho/godotenv"

@@ -1,7 +1,7 @@
 package link
 
 import (
-	"13-AdvancedDB/internal/stat"
+	"14-TestingAPI/internal/stat"
 	"math/rand"
 
 	"gorm.io/gorm"

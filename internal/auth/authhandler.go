@@ -1,10 +1,10 @@
 package auth
 
 import (
-	"13-AdvancedDB/configs"
-	"13-AdvancedDB/pkg/jwt"
-	"13-AdvancedDB/pkg/req"
-	"13-AdvancedDB/pkg/res"
+	"14-TestingAPI/configs"
+	"14-TestingAPI/pkg/jwt"
+	"14-TestingAPI/pkg/req"
+	"14-TestingAPI/pkg/res"
 	"net/http"
 )
 

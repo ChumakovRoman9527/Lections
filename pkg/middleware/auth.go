@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"13-AdvancedDB/configs"
-	"13-AdvancedDB/pkg/jwt"
+	"14-TestingAPI/configs"
+	"14-TestingAPI/pkg/jwt"
 	"context"
 	"log"
 	"net/http"
