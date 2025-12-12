@@ -2,6 +2,7 @@ package auth
 
 import (
 	"14-TestingAPI/internal/user"
+	"14-TestingAPI/pkg/di"
 	"errors"
 	"fmt"
 
@@ -9,10 +10,10 @@ import (
 )
 
 type AuthService struct {
-	UserRepository *user.UserRepository
+	UserRepository di.IUserRepository
 }
 
-func NewAuthService(userRepository *user.UserRepository) *AuthService {
+func NewAuthService(userRepository di.IUserRepository) *AuthService {
 	return &AuthService{UserRepository: userRepository}
 }
 
